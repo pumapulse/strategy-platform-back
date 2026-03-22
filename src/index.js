@@ -25,9 +25,18 @@ app.use('/api/strategies', strategyRoutes);
 app.use('/api/follow', followRoutes);
 app.use('/api/admin', adminRoutes);
 
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', message: 'Trading Strategy Platform API' });
+});
+
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📝 Health check: http://localhost:${PORT}/health`);
-});
+// Only call app.listen in non-serverless environments
+if (process.env.VERCEL !== '1') {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`📝 Health check: http://localhost:${PORT}/health`);
+  });
+}
+
+module.exports = app;
