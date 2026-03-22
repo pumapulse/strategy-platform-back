@@ -110,6 +110,7 @@ const login = async (req, res) => {
 
 const getProfile = async (req, res) => {
   try {
+<<<<<<< HEAD
     // Try with optional columns first
     let { data: user, error } = await supabase
       .from('users')
@@ -132,6 +133,18 @@ const getProfile = async (req, res) => {
 
     if (!user) return res.status(404).json({ error: 'User not found' });
 
+=======
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('id, email, name, created_at')
+      .eq('id', req.userId)
+      .single();
+
+    if (error || !user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+>>>>>>> 088f87957ad536d3d27b403fd3e63ac554ccaa15
     res.json({ user });
   } catch (error) {
     console.error('Get profile error:', error);
@@ -139,6 +152,7 @@ const getProfile = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
 const updateProfile = async (req, res) => {
   try {
     const { name, bio, avatar_url } = req.body;
@@ -252,3 +266,6 @@ const adminLogin = async (req, res) => {
 
 module.exports = { signup, login, getProfile, updateProfile, uploadAvatar, adminLogin };
 
+=======
+module.exports = { signup, login, getProfile };
+>>>>>>> 088f87957ad536d3d27b403fd3e63ac554ccaa15
