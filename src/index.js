@@ -7,6 +7,7 @@ const discussionRoutes = require('./routes/discussion');
 const strategyRoutes = require('./routes/strategy');
 const followRoutes = require('./routes/follow');
 const adminRoutes = require('./routes/admin');
+const paymentRoutes = require('./routes/payment');
 const { errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
@@ -24,6 +25,7 @@ app.use('/api/discussions', discussionRoutes);
 app.use('/api/strategies', strategyRoutes);
 app.use('/api/follow', followRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/payments', paymentRoutes);
 
 app.get('/', (req, res) => {
   res.json({ status: 'ok', message: 'Trading Strategy Platform API' });
