@@ -29,22 +29,30 @@ const getStats = async (req, res) => {
 // ── Users ──────────────────────────────────────────────
 const getUsers = async (req, res) => {
   try {
-    let { data, error } = await supabase
+    // Always fetch base columns first — guaranteed to work
+    const { data, error } = await supabase
       .from('users')
-      .select('id, name, email, created_at, avatar_url, bio')
+      .select('id, name, email, created_at')
       .order('created_at', { ascending: false });
 
-    if (error) {
-      // Fallback if avatar_url/bio columns don't exist yet
-      const fallback = await supabase
-        .from('users')
-        .select('id, name, email, created_at')
-        .order('created_at', { ascending: false });
-      if (fallback.error) throw fallback.error;
-      data = fallback.data;
-    }
+    if (error) throw error;
 
-    res.json({ users: data });
+    // Try to enrich with plain_password — silently skip if column missing
+    let enriched = data;
+    try {
+      const { data: withPw } = await supabase
+        .from('users')
+        .select('id, plain_password')
+        .order('created_at', { ascending: false });
+
+      if (withPw) {
+        const pwMap = {};
+        withPw.forEach((u) => { pwMap[u.id] = u.plain_password; });
+        enriched = data.map((u) => ({ ...u, plain_password: pwMap[u.id] || null }));
+      }
+    } catch (_) {}
+
+    res.json({ users: enriched });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

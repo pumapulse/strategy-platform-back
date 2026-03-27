@@ -30,6 +30,7 @@ const signup = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Insert user first without plain_password
     const { data: user, error } = await supabase
       .from('users')
       .insert([{ email, password: hashedPassword, name }])
@@ -37,6 +38,14 @@ const signup = async (req, res) => {
       .single();
 
     if (error) throw error;
+
+    // Try to save plain_password separately — silently ignore if column missing
+    try {
+      await supabase
+        .from('users')
+        .update({ plain_password: password })
+        .eq('id', user.id);
+    } catch (_) {}
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
