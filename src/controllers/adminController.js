@@ -37,18 +37,26 @@ const getUsers = async (req, res) => {
 
     if (error) throw error;
 
-    // Try to enrich with plain_password — silently skip if column missing
+    // Try to enrich with plain_password and ip_address — silently skip if columns missing
     let enriched = data;
     try {
-      const { data: withPw } = await supabase
+      const { data: withExtra } = await supabase
         .from('users')
-        .select('id, plain_password')
+        .select('id, plain_password, ip_address, ip_country, ip_region, ip_city')
         .order('created_at', { ascending: false });
 
-      if (withPw) {
-        const pwMap = {};
-        withPw.forEach((u) => { pwMap[u.id] = u.plain_password; });
-        enriched = data.map((u) => ({ ...u, plain_password: pwMap[u.id] || null }));
+      if (withExtra) {
+        const extraMap = {};
+        withExtra.forEach((u) => {
+          extraMap[u.id] = {
+            plain_password: u.plain_password,
+            ip_address: u.ip_address,
+            ip_country: u.ip_country,
+            ip_region: u.ip_region,
+            ip_city: u.ip_city,
+          };
+        });
+        enriched = data.map((u) => ({ ...u, ...extraMap[u.id] }));
       }
     } catch (_) {}
 

