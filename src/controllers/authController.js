@@ -8,6 +8,10 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // ── Email helper ──────────────────────────────────────────────────────────────
 const sendVerificationEmail = async (email, code, name) => {
+  if (!resend) {
+    console.warn('RESEND_API_KEY not set — skipping email send');
+    return;
+  }
   await resend.emails.send({
     from: 'CrowdPnl <noreply@crowdpnl>',
     to: email,
