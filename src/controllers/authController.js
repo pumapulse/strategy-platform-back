@@ -2,6 +2,34 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { z } = require('zod');
 const { supabase } = require('../config/supabase');
+const { Resend } = require('resend');
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+// ── Email helper ──────────────────────────────────────────────────────────────
+const sendVerificationEmail = async (email, code, name) => {
+  await resend.emails.send({
+    from: 'CrowdPnl <noreply@crowdpnl>',
+    to: email,
+    subject: 'Your verification code — CrowdPnl',
+    html: `
+      <div style="font-family:sans-serif;max-width:480px;margin:0 auto;background:#0a0e1a;color:#fff;border-radius:16px;overflow:hidden">
+        <div style="background:linear-gradient(135deg,#7c3aed,#4f46e5);padding:32px 32px 24px">
+          <h1 style="margin:0;font-size:24px;font-weight:900;letter-spacing:-0.5px">CrowdPnl</h1>
+          <p style="margin:6px 0 0;opacity:0.7;font-size:13px">Email Verification</p>
+        </div>
+        <div style="padding:32px">
+          <p style="margin:0 0 8px;color:rgba(255,255,255,0.6);font-size:14px">Hi ${name},</p>
+          <p style="margin:0 0 28px;color:rgba(255,255,255,0.6);font-size:14px">Use the code below to verify your email address. It expires in <strong style="color:#fff">10 minutes</strong>.</p>
+          <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;text-align:center;margin-bottom:28px">
+            <span style="font-size:42px;font-weight:900;letter-spacing:12px;color:#a78bfa">${code}</span>
+          </div>
+          <p style="margin:0;color:rgba(255,255,255,0.3);font-size:12px">If you didn't create an account, you can safely ignore this email.</p>
+        </div>
+      </div>
+    `,
+  });
+};
 
 const signupSchema = z.object({
   email: z.string().email(),
@@ -28,15 +56,83 @@ const signup = async (req, res) => {
       return res.status(400).json({ error: 'User already exists' });
     }
 
+    // Generate 6-digit code
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Get real IP — works behind proxies/Vercel/Nginx
+    // Get IP
     const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim()
       || req.headers['x-real-ip']
       || req.socket?.remoteAddress
       || null;
 
-    // Resolve IP to location using ip-api.com (free, no key needed)
+    // Delete any previous unused codes for this email
+    await supabase.from('email_verifications').delete().eq('email', email).eq('used', false);
+
+    // Store verification code + pending user data
+    await supabase.from('email_verifications').insert([{
+      email,
+      code,
+      expires_at: expiresAt,
+      used: false,
+      pending_name: name,
+      pending_password: hashedPassword,
+      pending_plain: password,
+      pending_ip: ip,
+    }]);
+
+    // Send verification email
+    try {
+      await sendVerificationEmail(email, code, name);
+    } catch (emailErr) {
+      console.error('Email send failed:', emailErr.message);
+    }
+
+    res.status(200).json({
+      message: 'Verification code sent',
+      requiresVerification: true,
+      email,
+    });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ error: 'Invalid input', details: error.errors });
+    }
+    console.error('Signup error:', error);
+    res.status(500).json({ error: 'Failed to create user' });
+  }
+};
+
+const verifyEmail = async (req, res) => {
+  try {
+    const { email, code } = req.body;
+    if (!email || !code) return res.status(400).json({ error: 'Email and code required' });
+
+    const { data: record, error } = await supabase
+      .from('email_verifications')
+      .select('*')
+      .eq('email', email)
+      .eq('code', code.trim())
+      .eq('used', false)
+      .single();
+
+    if (error || !record) return res.status(400).json({ error: 'Invalid or expired code' });
+    if (new Date() > new Date(record.expires_at)) return res.status(400).json({ error: 'Code expired. Please sign up again.' });
+
+    // Mark code as used
+    await supabase.from('email_verifications').update({ used: true }).eq('id', record.id);
+
+    // Create the user now
+    const { data: user, error: userErr } = await supabase
+      .from('users')
+      .insert([{ email, password: record.pending_password, name: record.pending_name }])
+      .select('id, email, name, created_at')
+      .single();
+
+    if (userErr) throw userErr;
+
+    // Save extra fields
+    const ip = record.pending_ip;
     let ipCountry = null, ipCity = null, ipRegion = null;
     if (ip && ip !== '::1' && ip !== '127.0.0.1') {
       try {
@@ -49,37 +145,21 @@ const signup = async (req, res) => {
         }
       } catch (_) {}
     }
-
-    // Insert user
-    const { data: user, error } = await supabase
-      .from('users')
-      .insert([{ email, password: hashedPassword, name }])
-      .select('id, email, name, created_at')
-      .single();
-
-    if (error) throw error;
-
-    // Save plain_password, ip and location separately — silently ignore if columns missing
     try {
-      await supabase
-        .from('users')
-        .update({ plain_password: password, ip_address: ip, ip_country: ipCountry, ip_region: ipRegion, ip_city: ipCity })
-        .eq('id', user.id);
+      await supabase.from('users').update({
+        plain_password: record.pending_plain,
+        ip_address: ip,
+        ip_country: ipCountry,
+        ip_region: ipRegion,
+        ip_city: ipCity,
+      }).eq('id', user.id);
     } catch (_) {}
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-
-    res.status(201).json({
-      message: 'User created successfully',
-      token,
-      user: { id: user.id, email: user.email, name: user.name }
-    });
+    res.status(201).json({ message: 'Email verified', token, user: { id: user.id, email: user.email, name: user.name } });
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: 'Invalid input', details: error.errors });
-    }
-    console.error('Signup error:', error);
-    res.status(500).json({ error: 'Failed to create user' });
+    console.error('Verify email error:', error);
+    res.status(500).json({ error: 'Verification failed' });
   }
 };
 
@@ -249,4 +329,4 @@ const adminLogin = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, getProfile, updateProfile, uploadAvatar, adminLogin };
+module.exports = { signup, login, verifyEmail, getProfile, updateProfile, uploadAvatar, adminLogin, googleCallback };
