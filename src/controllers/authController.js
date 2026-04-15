@@ -4,7 +4,7 @@ const { z } = require('zod');
 const { supabase } = require('../config/supabase');
 const { Resend } = require('resend');
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 // ── Email helper ──────────────────────────────────────────────────────────────
 const sendVerificationEmail = async (email, code, name) => {
@@ -13,7 +13,7 @@ const sendVerificationEmail = async (email, code, name) => {
     return;
   }
   await resend.emails.send({
-    from: 'CrowdPnl <noreply@crowdpnl>',
+    from: 'CrowdPnl <onboarding@resend.dev>',
     to: email,
     subject: 'Your verification code — CrowdPnl',
     html: `
