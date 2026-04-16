@@ -13,7 +13,7 @@ const sendVerificationEmail = async (email, code, name) => {
     return;
   }
   await resend.emails.send({
-    from: 'CrowdPnl <onboarding@resend.dev>',
+    from: 'CrowdPnl <noreply@crowdpnl.com>',
     to: email,
     subject: 'Your verification code — CrowdPnl',
     html: `
