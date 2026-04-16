@@ -333,4 +333,4 @@ const adminLogin = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, verifyEmail, getProfile, updateProfile, uploadAvatar, adminLogin, googleCallback };
+module.exports = { signup, login, verifyEmail, getProfile, updateProfile, uploadAvatar, adminLogin };
