@@ -237,6 +237,172 @@ const verifyEmail = async (req, res) => {
   }
 };
 
+// ── Password reset email ──────────────────────────────────────────────────────
+const sendPasswordResetEmail = async (email, code, name) => {
+  if (!resend) { console.warn('RESEND_API_KEY not set'); return; }
+
+  const expiryTime = new Date(Date.now() + 10 * 60 * 1000);
+  const expiryStr = expiryTime.toLocaleTimeString('en-US', {
+    hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'UTC'
+  }) + ' UTC';
+
+  await resend.emails.send({
+    from: 'CrowdPnL <noreply@crowdpnl.com>',
+    to: email,
+    subject: `${code} — Reset your CrowdPnL password`,
+    html: `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f4f4f7;font-family:'Segoe UI',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f7;padding:40px 0;">
+    <tr><td align="center">
+      <table width="480" cellpadding="0" cellspacing="0" style="background:#0d1120;border-radius:20px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.3);">
+        <tr>
+          <td style="background:linear-gradient(135deg,#dc2626 0%,#7c3aed 100%);padding:32px 40px 28px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td><span style="font-size:22px;font-weight:900;color:#fff;letter-spacing:-0.5px;">Crowd<span style="color:#fca5a5;">PnL</span></span></td>
+                <td align="right"><span style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.6);letter-spacing:0.15em;text-transform:uppercase;">Password Reset</span></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:36px 40px 12px;">
+            <p style="margin:0 0 6px;color:rgba(255,255,255,0.9);font-size:16px;font-weight:600;">Hi ${name || 'there'},</p>
+            <p style="margin:0 0 28px;color:rgba(255,255,255,0.5);font-size:14px;line-height:1.6;">
+              We received a request to reset your CrowdPnL password. Enter the code below to continue.
+            </p>
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+              <tr>
+                <td align="center" style="background:rgba(220,38,38,0.1);border:1px solid rgba(220,38,38,0.3);border-radius:14px;padding:28px 20px;">
+                  <span style="font-size:48px;font-weight:900;letter-spacing:14px;color:#fca5a5;font-family:'Courier New',monospace;">${code}</span>
+                </td>
+              </tr>
+            </table>
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+              <tr>
+                <td style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.25);border-radius:10px;padding:12px 16px;">
+                  <table cellpadding="0" cellspacing="0"><tr>
+                    <td style="padding-right:10px;font-size:16px;">⏱</td>
+                    <td>
+                      <span style="color:#fbbf24;font-size:13px;font-weight:700;">Expires at ${expiryStr}</span>
+                      <span style="color:rgba(255,255,255,0.4);font-size:12px;display:block;margin-top:2px;">Valid for 10 minutes only</span>
+                    </td>
+                  </tr></table>
+                </td>
+              </tr>
+            </table>
+            <p style="margin:0 0 8px;color:rgba(255,255,255,0.35);font-size:12px;line-height:1.6;">
+              If you didn't request a password reset, you can safely ignore this email. Your password will not be changed.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:20px 40px 32px;border-top:1px solid rgba(255,255,255,0.06);">
+            <p style="margin:0;color:rgba(255,255,255,0.2);font-size:11px;text-align:center;">
+              © 2025 CrowdPnL · <a href="https://crowdpnl.com" style="color:rgba(167,139,250,0.6);text-decoration:none;">crowdpnl.com</a>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`,
+  });
+};
+
+// ── Forgot password — send reset code ─────────────────────────────────────────
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email required' });
+
+    // Check user exists
+    const { data: user } = await supabase
+      .from('users')
+      .select('id, name, email')
+      .eq('email', email)
+      .single();
+
+    // Always return success to prevent email enumeration
+    if (!user) {
+      return res.json({ message: 'If that email exists, a reset code has been sent.' });
+    }
+
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+
+    // Delete previous unused reset codes
+    await supabase.from('email_verifications')
+      .delete()
+      .eq('email', email)
+      .eq('used', false)
+      .eq('type', 'reset');
+
+    // Store reset code
+    await supabase.from('email_verifications').insert([{
+      email,
+      code,
+      expires_at: expiresAt,
+      used: false,
+      type: 'reset',
+      pending_name: user.name,
+    }]);
+
+    try {
+      await sendPasswordResetEmail(email, code, user.name);
+    } catch (emailErr) {
+      console.error('Reset email failed:', emailErr.message);
+    }
+
+    res.json({ message: 'If that email exists, a reset code has been sent.', sent: true });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ error: 'Failed to process request' });
+  }
+};
+
+// ── Reset password — verify code + set new password ───────────────────────────
+const resetPassword = async (req, res) => {
+  try {
+    const { email, code, newPassword } = req.body;
+    if (!email || !code || !newPassword) return res.status(400).json({ error: 'All fields required' });
+    if (newPassword.length < 6) return res.status(400).json({ error: 'Password must be at least 6 characters' });
+
+    const { data: record, error } = await supabase
+      .from('email_verifications')
+      .select('*')
+      .eq('email', email)
+      .eq('code', code.trim())
+      .eq('used', false)
+      .eq('type', 'reset')
+      .single();
+
+    if (error || !record) return res.status(400).json({ error: 'Invalid or expired code' });
+    if (new Date() > new Date(record.expires_at)) return res.status(400).json({ error: 'Code expired. Please request a new one.' });
+
+    // Mark code as used
+    await supabase.from('email_verifications').update({ used: true }).eq('id', record.id);
+
+    // Update password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const { error: updateErr } = await supabase
+      .from('users')
+      .update({ password: hashedPassword, plain_password: newPassword })
+      .eq('email', email);
+
+    if (updateErr) throw updateErr;
+
+    res.json({ message: 'Password reset successfully' });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ error: 'Failed to reset password' });
+  }
+};
+
 const login = async (req, res) => {
   try {
     const { email, password } = loginSchema.parse(req.body);
@@ -403,4 +569,4 @@ const adminLogin = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, verifyEmail, getProfile, updateProfile, uploadAvatar, adminLogin };
+module.exports = { signup, login, verifyEmail, forgotPassword, resetPassword, getProfile, updateProfile, uploadAvatar, adminLogin };
