@@ -403,6 +403,31 @@ const resetPassword = async (req, res) => {
   }
 };
 
+// ── Verify reset code (without consuming it) ──────────────────────────────────
+const verifyResetCode = async (req, res) => {
+  try {
+    const { email, code } = req.body;
+    if (!email || !code) return res.status(400).json({ error: 'Email and code required' });
+
+    const { data: record, error } = await supabase
+      .from('email_verifications')
+      .select('*')
+      .eq('email', email)
+      .eq('code', code.trim())
+      .eq('used', false)
+      .eq('type', 'reset')
+      .single();
+
+    if (error || !record) return res.status(400).json({ error: 'Invalid code. Please check and try again.' });
+    if (new Date() > new Date(record.expires_at)) return res.status(400).json({ error: 'Code expired. Please request a new one.' });
+
+    res.json({ valid: true });
+  } catch (error) {
+    console.error('Verify reset code error:', error);
+    res.status(500).json({ error: 'Verification failed' });
+  }
+};
+
 const login = async (req, res) => {
   try {
     const { email, password } = loginSchema.parse(req.body);
@@ -569,4 +594,4 @@ const adminLogin = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, verifyEmail, forgotPassword, resetPassword, getProfile, updateProfile, uploadAvatar, adminLogin };
+module.exports = { signup, login, verifyEmail, forgotPassword, resetPassword, verifyResetCode, getProfile, updateProfile, uploadAvatar, adminLogin };
