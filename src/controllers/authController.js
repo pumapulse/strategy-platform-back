@@ -12,25 +12,95 @@ const sendVerificationEmail = async (email, code, name) => {
     console.warn('RESEND_API_KEY not set — skipping email send');
     return;
   }
+
+  const expiryTime = new Date(Date.now() + 10 * 60 * 1000);
+  const expiryStr = expiryTime.toLocaleTimeString('en-US', {
+    hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'UTC'
+  }) + ' UTC';
+
   await resend.emails.send({
-    from: 'CrowdPnl <noreply@crowdpnl.com>',
+    from: 'CrowdPnL <noreply@crowdpnl.com>',
     to: email,
-    subject: 'Your verification code — CrowdPnl',
+    subject: `${code} is your CrowdPnL verification code`,
     html: `
-      <div style="font-family:sans-serif;max-width:480px;margin:0 auto;background:#0a0e1a;color:#fff;border-radius:16px;overflow:hidden">
-        <div style="background:linear-gradient(135deg,#7c3aed,#4f46e5);padding:32px 32px 24px">
-          <h1 style="margin:0;font-size:24px;font-weight:900;letter-spacing:-0.5px">CrowdPnl</h1>
-          <p style="margin:6px 0 0;opacity:0.7;font-size:13px">Email Verification</p>
-        </div>
-        <div style="padding:32px">
-          <p style="margin:0 0 8px;color:rgba(255,255,255,0.6);font-size:14px">Hi ${name},</p>
-          <p style="margin:0 0 28px;color:rgba(255,255,255,0.6);font-size:14px">Use the code below to verify your email address. It expires in <strong style="color:#fff">10 minutes</strong>.</p>
-          <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;text-align:center;margin-bottom:28px">
-            <span style="font-size:42px;font-weight:900;letter-spacing:12px;color:#a78bfa">${code}</span>
-          </div>
-          <p style="margin:0;color:rgba(255,255,255,0.3);font-size:12px">If you didn't create an account, you can safely ignore this email.</p>
-        </div>
-      </div>
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f4f4f7;font-family:'Segoe UI',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f7;padding:40px 0;">
+    <tr><td align="center">
+      <table width="480" cellpadding="0" cellspacing="0" style="background:#0d1120;border-radius:20px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.3);">
+
+        <!-- Header -->
+        <tr>
+          <td style="background:linear-gradient(135deg,#7c3aed 0%,#4f46e5 100%);padding:32px 40px 28px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td>
+                  <span style="font-size:22px;font-weight:900;color:#fff;letter-spacing:-0.5px;">Crowd<span style="color:#c4b5fd;">PnL</span></span>
+                </td>
+                <td align="right">
+                  <span style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.6);letter-spacing:0.15em;text-transform:uppercase;">Email Verification</span>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Body -->
+        <tr>
+          <td style="padding:36px 40px 12px;">
+            <p style="margin:0 0 6px;color:rgba(255,255,255,0.9);font-size:16px;font-weight:600;">Hi ${name},</p>
+            <p style="margin:0 0 28px;color:rgba(255,255,255,0.5);font-size:14px;line-height:1.6;">
+              Enter the code below to verify your email address and complete your CrowdPnL account setup.
+            </p>
+
+            <!-- Code box -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+              <tr>
+                <td align="center" style="background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);border-radius:14px;padding:28px 20px;">
+                  <span style="font-size:48px;font-weight:900;letter-spacing:14px;color:#a78bfa;font-family:'Courier New',monospace;">${code}</span>
+                </td>
+              </tr>
+            </table>
+
+            <!-- Expiry warning -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+              <tr>
+                <td style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.25);border-radius:10px;padding:12px 16px;">
+                  <table cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td style="padding-right:10px;font-size:16px;">⏱</td>
+                      <td>
+                        <span style="color:#fbbf24;font-size:13px;font-weight:700;">Expires at ${expiryStr}</span>
+                        <span style="color:rgba(255,255,255,0.4);font-size:12px;display:block;margin-top:2px;">This code is valid for 10 minutes only</span>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:0 0 8px;color:rgba(255,255,255,0.35);font-size:12px;line-height:1.6;">
+              If you didn't create a CrowdPnL account, you can safely ignore this email. Someone may have entered your email address by mistake.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="padding:20px 40px 32px;border-top:1px solid rgba(255,255,255,0.06);">
+            <p style="margin:0;color:rgba(255,255,255,0.2);font-size:11px;text-align:center;">
+              © 2025 CrowdPnL · <a href="https://crowdpnl.com" style="color:rgba(167,139,250,0.6);text-decoration:none;">crowdpnl.com</a>
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
     `,
   });
 };
