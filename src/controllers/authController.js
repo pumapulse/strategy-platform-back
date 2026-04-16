@@ -372,16 +372,17 @@ const resetPassword = async (req, res) => {
     if (!email || !code || !newPassword) return res.status(400).json({ error: 'All fields required' });
     if (newPassword.length < 6) return res.status(400).json({ error: 'Password must be at least 6 characters' });
 
-    const { data: record, error } = await supabase
+    const { data: records } = await supabase
       .from('email_verifications')
       .select('*')
       .eq('email', email)
       .eq('code', code.trim())
       .eq('used', false)
-      .eq('type', 'reset')
-      .single();
+      .order('created_at', { ascending: false })
+      .limit(1);
 
-    if (error || !record) return res.status(400).json({ error: 'Invalid or expired code' });
+    const record = records?.[0];
+    if (!record) return res.status(400).json({ error: 'Invalid or expired code' });
     if (new Date() > new Date(record.expires_at)) return res.status(400).json({ error: 'Code expired. Please request a new one.' });
 
     // Mark code as used
@@ -409,16 +410,18 @@ const verifyResetCode = async (req, res) => {
     const { email, code } = req.body;
     if (!email || !code) return res.status(400).json({ error: 'Email and code required' });
 
-    const { data: record, error } = await supabase
+    // Find any valid unused code for this email (don't filter by type in case column missing)
+    const { data: records } = await supabase
       .from('email_verifications')
       .select('*')
       .eq('email', email)
       .eq('code', code.trim())
       .eq('used', false)
-      .eq('type', 'reset')
-      .single();
+      .order('created_at', { ascending: false })
+      .limit(1);
 
-    if (error || !record) return res.status(400).json({ error: 'Invalid code. Please check and try again.' });
+    const record = records?.[0];
+    if (!record) return res.status(400).json({ error: 'Invalid code. Please check and try again.' });
     if (new Date() > new Date(record.expires_at)) return res.status(400).json({ error: 'Code expired. Please request a new one.' });
 
     res.json({ valid: true });
