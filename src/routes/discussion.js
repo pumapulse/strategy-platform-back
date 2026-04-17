@@ -10,8 +10,8 @@ const { authenticate } = require('../middleware/auth');
 
 const router = Router();
 
-router.get('/', authenticate, getAllDiscussions);
-router.get('/:id', authenticate, getDiscussionById);
+router.get('/', getAllDiscussions);
+router.get('/:id', getDiscussionById);
 router.post('/', authenticate, createDiscussion);
 router.post('/:id/replies', authenticate, createReply);
 router.post('/:id/like', authenticate, likeDiscussion);
