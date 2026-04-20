@@ -17,58 +17,7 @@ const sendVerificationEmail = async (email, code, name) => {
     from: 'CrowdPnL <noreply@crowdpnl.com>',
     to: email,
     subject: 'Your CrowdPnL verification code',
-    text: `Hi ${name},\n\nYour verification code is: ${code}\n\nExpires in 10 minutes.\n\nIf you didn't request this, ignore this email.\n\n— CrowdPnL`,
-    html: `
-<!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f4f4f7;font-family:'Segoe UI',Arial,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f7;padding:40px 0;">
-    <tr><td align="center">
-      <table width="480" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
-
-        <!-- Header -->
-        <tr>
-          <td style="padding:32px 40px 24px;border-bottom:1px solid #f0f0f0;">
-            <span style="font-size:20px;font-weight:900;color:#0a0e1a;letter-spacing:-0.5px;">Crowd<span style="color:#7c3aed;">PnL</span></span>
-          </td>
-        </tr>
-
-        <!-- Body -->
-        <tr>
-          <td style="padding:32px 40px;">
-            <p style="margin:0 0 16px;color:#1a1a2e;font-size:15px;font-weight:400;line-height:1.6;">Hi ${name},</p>
-            <p style="margin:0 0 24px;color:#1a1a2e;font-size:15px;line-height:1.6;">Your verification code is:</p>
-
-            <!-- Code -->
-            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
-              <tr>
-                <td align="center" style="background:#f8f7ff;border:1px solid #e5e0ff;border-radius:8px;padding:24px 20px;">
-                  <span style="font-size:40px;font-weight:900;letter-spacing:12px;color:#7c3aed;font-family:'Courier New',monospace;">${code}</span>
-                </td>
-              </tr>
-            </table>
-
-            <p style="margin:0 0 24px;color:#1a1a2e;font-size:15px;line-height:1.6;">Expires in 10 minutes.</p>
-            <p style="margin:0;color:#888;font-size:13px;line-height:1.6;">If you didn't request this, ignore this email.</p>
-          </td>
-        </tr>
-
-        <!-- Footer -->
-        <tr>
-          <td style="padding:20px 40px;border-top:1px solid #f0f0f0;">
-            <p style="margin:0;color:#aaa;font-size:11px;">
-              © 2025 CrowdPnL · <a href="https://crowdpnl.com" style="color:#7c3aed;text-decoration:none;">crowdpnl.com</a>
-            </p>
-          </td>
-        </tr>
-
-      </table>
-    </td></tr>
-  </table>
-</body>
-</html>
-    `,
+    text: `Hi ${name},\n\nYour verification code is: ${code}\n\nExpires in 10 minutes.\n\nIf you didn't request this, ignore this email.`,
   });
 };
 
