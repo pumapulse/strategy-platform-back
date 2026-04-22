@@ -141,14 +141,14 @@ const strategies = [
   },
   {
     id: 12, name: 'Turtle Trading System', market: 'Crypto', timeframe: 'Daily',
-    win_rate: 55, profit_factor: 3.2, max_drawdown: 20.8, avg_return: 24.6,
+    win_rate: 42, profit_factor: 2.1, max_drawdown: 22.4, avg_return: 18.6,
     description: 'The legendary Turtle Trading system adapted for crypto. Buys 20-day highs, sells 20-day lows. Uses ATR-based position sizing and pyramiding. Designed to catch massive trends while cutting losses quickly.',
     rules: JSON.stringify(['System 1: Enter long on 20-day high breakout, short on 20-day low','System 2: Enter long on 55-day high breakout for larger moves','Position size: 1% account risk per ATR unit','Add to winners every 0.5 ATR move in your favor (max 4 units)','Exit: 10-day low for System 1, 20-day low for System 2']),
     pros: JSON.stringify(['Catches massive trends','Systematic and emotion-free','Proven 40-year track record','Works on any liquid market']),
     cons: JSON.stringify(['Low win rate requires discipline','Large drawdowns','Many small losses','Needs large capital for diversification']),
-    equity: JSON.stringify([10000,12870,16500,13800,19800,27200,22400,33800,44200,36800,50400,64700]),
-    monthly_returns: JSON.stringify([0,28.7,28.2,-16.4,43.5,37.4,-17.6,50.9,30.8,-16.7,37.0,28.4]),
-    trades: JSON.stringify([{pair:'BTC/USDT',type:'buy',entry:30000,exit:68000,pnl:126.7,date:'2024-01-01'},{pair:'ETH/USDT',type:'buy',entry:1500,exit:4000,pnl:166.7,date:'2024-01-15'},{pair:'SOL/USDT',type:'buy',entry:20,exit:200,pnl:900.0,date:'2024-01-20'}]),
+    equity: JSON.stringify([10000,10800,11900,10600,12400,14100,12800,15200,17800,15900,19400,22800]),
+    monthly_returns: JSON.stringify([0,8.0,10.2,-10.9,17.0,13.7,-9.2,18.8,17.1,-10.7,22.0,17.5]),
+    trades: JSON.stringify([{pair:'BTC/USDT',type:'buy',entry:30000,exit:38400,pnl:28.0,date:'2024-01-01'},{pair:'ETH/USDT',type:'buy',entry:1500,exit:2100,pnl:40.0,date:'2024-01-15'},{pair:'SOL/USDT',type:'buy',entry:20,exit:28,pnl:40.0,date:'2024-01-20'}]),
     backtest_data: JSON.stringify({total_trades:89,winning_trades:49,losing_trades:40,avg_win:24.6,avg_loss:8.8,max_consecutive_losses:10})
   }
 ];

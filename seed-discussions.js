@@ -1,4 +1,4 @@
-// Seed sample community discussions
+﻿// Seed sample community discussions
 // Run with: node seed-discussions.js
 
 require('dotenv').config();
@@ -360,6 +360,273 @@ I've been profitable for 14 consecutive months since implementing these rules. T
       { authorIndex: 3, content: 'For anyone struggling with this: it gets better. The fact that you can recognize revenge trading as a pattern means you\'re already ahead of most traders. The awareness is the first step.', likes: 93 },
     ],
   },
+  {
+    authorIndex: 4,
+    title: 'EMA Crossover Trend - 6 months live trading results on BTC daily',
+    category: 'Strategy',
+    content: `I have been running the EMA Crossover Trend strategy on BTC/USDT daily timeframe for 6 months. Here are my honest results.
+
+Setup: EMA 20/50/200 with volume confirmation on daily closes. Golden cross = long, death cross = exit.
+
+Results (Jan–Jun 2025):
+- Total signals: 8
+- Winners: 5 (62.5%)
+- Losers: 3 (37.5%)
+- Best trade: +34.2% (caught the Jan–Mar bull run)
+- Worst trade: -12.1% (false breakout in April)
+- Net return: +67.4%
+- Max drawdown: -18.3%
+
+Key observations:
+1. The EMA 200 filter is critical. I tried removing it and my win rate dropped to 44%.
+2. Volume confirmation on the crossover day eliminated 2 false signals that would have cost me 8% each.
+3. The 15% trailing stop saved me twice from giving back large gains.
+
+The strategy is slow — only 8 signals in 6 months. But each signal is high quality. This is not for impatient traders.
+
+Currently in a long position entered at $67,400. Stop at $57,290 (15% trailing from $67,400).`,
+    likes: 74,
+    views: 1890,
+    replies: [
+      { authorIndex: 0, content: 'The EMA 200 filter point is something I learned the hard way too. Without it you get whipsawed constantly in ranging markets. It acts as a macro trend filter that keeps you on the right side.', likes: 21 },
+      { authorIndex: 1, content: 'How do you handle the lag? By the time EMA 20 crosses EMA 50, you\'ve already missed 5-10% of the move. Do you use any leading indicators to get in earlier?', likes: 14 },
+      { authorIndex: 4, content: '@Mia — I accept the lag as the cost of confirmation. Missing the first 5-10% is fine if it means avoiding false signals. The strategy catches the middle 60-70% of major trends, which is more than enough.', likes: 18 },
+    ],
+  },
+  {
+    authorIndex: 2,
+    title: 'Bollinger Band Squeeze — catching explosive moves before they happen',
+    category: 'Strategy',
+    content: `The Bollinger Band Squeeze is one of my favorite setups because it gives you advance warning of a big move before it happens. Here is how I trade it.
+
+The setup: When Bollinger Band width reaches a 6-month low, the market is coiling. Energy is building. A big move is coming — you just don't know which direction yet.
+
+My entry rules:
+1. Band width must be at or near 6-month low (I use a 126-period lookback)
+2. Wait for the first expansion candle after the squeeze
+3. If it closes ABOVE the upper band — go long
+4. If it closes BELOW the lower band — go short
+5. Stop at the middle band (20 SMA)
+6. Target: entry price ± band width at time of entry
+
+Recent trade on SOL/USDT:
+- Squeeze identified at $142 (band width at 6-month low)
+- Expansion candle closed above upper band at $156
+- Entry: $156
+- Stop: $148 (middle band)
+- Target: $156 + $28 (band width) = $184
+- Result: Hit target in 11 days. +17.9%
+
+The key is patience during the squeeze. Sometimes it lasts 2 weeks. Don't try to predict direction — wait for the market to tell you.`,
+    likes: 118,
+    views: 2670,
+    replies: [
+      { authorIndex: 3, content: 'The patience point is everything. I used to try to predict which way the squeeze would break and got burned constantly. Now I just set alerts for both directions and wait.', likes: 33 },
+      { authorIndex: 0, content: 'How do you handle false breakouts? Sometimes price closes outside the band and then immediately reverses back inside. Do you have a filter for that?', likes: 19 },
+      { authorIndex: 2, content: '@Alex — I require the breakout candle to close at least 0.5% outside the band, not just touch it. Also, volume must be above the 20-period average on the breakout candle. These two filters eliminate about 70% of false breakouts.', likes: 27 },
+    ],
+  },
+  {
+    authorIndex: 0,
+    title: 'Turtle Trading System — why a 42% win rate can still make you rich',
+    category: 'Strategy',
+    content: `Most traders think you need a high win rate to be profitable. The Turtle Trading System proves otherwise. Here is why a 42% win rate is actually fine.
+
+The math:
+- Win rate: 42%
+- Average winner: +24.6%
+- Average loser: -8.8%
+- Profit factor: 2.1
+
+Expected value per trade = (0.42 × 24.6) - (0.58 × 8.8) = 10.33 - 5.10 = +5.23%
+
+Every trade has a positive expected value of +5.23% of risked capital. Over 89 trades, that compounds significantly.
+
+The psychological challenge:
+You will lose 58% of your trades. That means roughly 6 out of every 10 trades are losers. Most traders cannot handle this emotionally and abandon the system during a losing streak.
+
+The solution: Think in batches of 20 trades, not individual trades. Over any 20-trade sample, the math should work out. One losing trade means nothing.
+
+My 12-month results running the Turtle System on BTC:
+- 89 trades
+- 49 winners, 40 losers
+- Net return: +128%
+- Max drawdown: -22.4%
+
+The system works. The question is whether you can follow it.`,
+    likes: 156,
+    views: 3450,
+    replies: [
+      { authorIndex: 1, content: 'The "think in batches of 20" mental model is something every trader needs to internalize. Individual trade outcomes are noise. The edge only shows over a large sample.', likes: 44 },
+      { authorIndex: 4, content: 'The 22.4% max drawdown is the real test. Most people say they can handle drawdowns until they\'re actually sitting in one. Have you ever been tempted to abandon the system during a losing streak?', likes: 28 },
+      { authorIndex: 0, content: '@Liam — Yes, absolutely. In March I had 7 consecutive losses. My account was down 14%. Every instinct said to stop. I kept a journal entry from that period: "The system is not broken. I am in a normal losing streak. Keep going." I\'m glad I did.', likes: 52 },
+    ],
+  },
+  {
+    authorIndex: 1,
+    title: 'ML Momentum Scanner — how machine learning actually works in trading',
+    category: 'Analysis',
+    content: `A lot of people see "ML" and think it is magic. It is not. Here is exactly how the ML Momentum Scanner works and why it outperforms traditional indicators.
+
+The model: XGBoost gradient boosting classifier trained on 3 years of 4H BTC/ETH data.
+
+Input features (12 total):
+1. RSI(14)
+2. MACD histogram value
+3. EMA 20/50/200 alignment score (0-3)
+4. Volume ratio (current / 20-period average)
+5. ATR percentile (where current ATR sits in 52-week range)
+6. Bollinger Band %B
+7. 5-period price momentum
+8. 10-period price momentum
+9. 20-period price momentum
+10. Candle body/wick ratio
+11. Previous candle direction
+12. Time of day (session)
+
+Output: Probability score 0-1 (bearish to bullish)
+- Score > 0.75: Long signal
+- Score < 0.25: Short signal
+- 0.25-0.75: No trade
+
+Why it beats single indicators:
+A single RSI reading tells you one thing. The model combines 12 signals simultaneously and weights them based on what has historically mattered most. In trending markets, momentum features dominate. In ranging markets, mean-reversion features dominate. The model adapts automatically.
+
+Walk-forward validation results:
+- Training: 2021-2023 data
+- Testing: 2024 data (never seen during training)
+- Out-of-sample win rate: 67%
+- Out-of-sample profit factor: 3.1
+
+The 67% win rate on data the model never saw is what makes this credible.`,
+    likes: 189,
+    views: 4230,
+    replies: [
+      { authorIndex: 2, content: 'The walk-forward validation point is crucial. Anyone can get 80%+ win rate by overfitting to historical data. The out-of-sample performance is the only number that matters.', likes: 56 },
+      { authorIndex: 3, content: 'How often is the model retrained? Markets change over time. A model trained on 2021-2023 data might not capture the current market regime.', likes: 31 },
+      { authorIndex: 1, content: '@Sofia — Great question. The model is retrained quarterly with a rolling 3-year window. This keeps it current without overfitting to very recent data. The feature set stays constant — only the weights change.', likes: 43 },
+    ],
+  },
+  {
+    authorIndex: 3,
+    title: 'Funding Rate Arbitrage — the strategy most crypto traders have never heard of',
+    category: 'Strategy',
+    content: `Funding rates are one of the most reliable signals in crypto and almost nobody talks about them. Here is how I use them.
+
+What is a funding rate?
+Perpetual futures contracts have no expiry. To keep them anchored to spot price, exchanges charge a funding fee every 8 hours. When longs are dominant, longs pay shorts. When shorts are dominant, shorts pay longs.
+
+The signal:
+- Funding rate > +0.1%: Market is extremely long-biased. Correction likely.
+- Funding rate < -0.05%: Market is extremely short-biased. Bounce likely.
+
+My rules:
+1. Funding rate must exceed +0.1% (or drop below -0.05%)
+2. RSI confirmation: >70 for shorts, <30 for longs
+3. Enter at 4H candle close after the funding spike
+4. Stop: 2% beyond entry
+5. Target: 4% (2:1 R:R)
+6. Exit immediately if funding normalizes before target
+
+12-month results on BTC/ETH perpetuals:
+- 178 signals
+- Win rate: 67%
+- Average winner: +3.8%
+- Average loser: -2.1%
+- Net return: +142%
+
+The edge comes from the fact that extreme funding rates represent market imbalance. When everyone is positioned the same way, the move to correct that imbalance is predictable.`,
+    likes: 143,
+    views: 3120,
+    replies: [
+      { authorIndex: 0, content: 'This is one of the most underrated strategies in crypto. The funding rate is essentially a sentiment indicator that has real money behind it — people are paying to hold those positions.', likes: 38 },
+      { authorIndex: 4, content: 'Where do you get funding rate data? I know Binance shows it on the perpetuals page but is there a way to get historical data for backtesting?', likes: 22 },
+      { authorIndex: 3, content: '@Liam — Coinglass.com has excellent historical funding rate data going back years. You can export it as CSV. CryptoQuant also has it with API access.', likes: 29 },
+    ],
+  },
+  {
+    authorIndex: 4,
+    title: 'On-chain whale tracking — how I follow smart money in crypto',
+    category: 'Analysis',
+    content: `Blockchain data is public. Every large wallet movement is visible. Here is how I use on-chain data to follow what the big players are doing.
+
+Key metrics I track:
+
+1. Exchange Net Flow
+When large amounts of BTC move FROM exchanges TO cold wallets = accumulation (bullish)
+When large amounts move TO exchanges = potential selling (bearish)
+
+2. Whale Wallet Activity
+Wallets holding >1000 BTC are tracked by services like Glassnode and CryptoQuant. When these wallets accumulate, price tends to follow within 2-4 weeks.
+
+3. SOPR (Spent Output Profit Ratio)
+SOPR > 1: Coins being moved are in profit (potential selling pressure)
+SOPR < 1: Coins being moved are at a loss (capitulation, potential bottom)
+
+My trading rule:
+- Net exchange outflow > 500 BTC in 24h + price above 50-day EMA + RSI < 60 = Long signal
+- Hold for 5-15 days
+- Stop: 5% below entry
+- Target: 10% above entry
+
+12-month results:
+- 112 signals
+- Win rate: 60%
+- Average winner: +12.4%
+- Average loser: -5.2%
+- Net return: +134%
+
+The edge: on-chain data is a leading indicator. It shows you what is happening before it shows up in price.`,
+    likes: 167,
+    views: 3780,
+    replies: [
+      { authorIndex: 1, content: 'The exchange net flow metric is something I check every morning. It is one of the few indicators that actually has predictive power rather than just describing what already happened.', likes: 47 },
+      { authorIndex: 2, content: 'What services do you use for this data? Glassnode is expensive. Are there free alternatives that are good enough for retail traders?', likes: 25 },
+      { authorIndex: 4, content: '@James — CryptoQuant has a free tier that covers the basics. IntoTheBlock is also good and free. For serious analysis, Glassnode is worth the cost but you can get 80% of the value from free tools.', likes: 33 },
+    ],
+  },
+  {
+    authorIndex: 0,
+    title: 'MACD Divergence deep dive — my 200-trade analysis',
+    category: 'Strategy',
+    content: `I tracked every MACD divergence signal I took over 200 trades across 8 months. Here is what the data actually shows.
+
+Setup: MACD(12,26,9) on 4H charts. Regular divergence for reversals, hidden divergence for trend continuation.
+
+Results by divergence type:
+
+Regular Bearish Divergence (reversal):
+- 67 signals
+- Win rate: 58%
+- Average winner: +8.2%
+- Average loser: -4.1%
+- Best context: After RSI >70 and at key resistance
+
+Regular Bullish Divergence (reversal):
+- 71 signals
+- Win rate: 61%
+- Average winner: +9.4%
+- Average loser: -4.3%
+- Best context: After RSI <30 and at key support
+
+Hidden Bullish Divergence (continuation):
+- 62 signals
+- Win rate: 71%
+- Average winner: +11.2%
+- Average loser: -3.8%
+- Best context: During uptrend, on pullback to EMA 20
+
+Key finding: Hidden divergence outperforms regular divergence significantly. The 71% win rate on hidden bullish divergence is the highest of any setup I have tested.
+
+The reason: Hidden divergence trades WITH the trend. You have the trend as a tailwind. Regular divergence fights the trend, which is inherently lower probability.`,
+    likes: 198,
+    views: 4560,
+    replies: [
+      { authorIndex: 3, content: 'The hidden vs regular divergence win rate difference is striking. 71% vs 58-61% is a massive edge. I am going to focus exclusively on hidden divergence for the next 3 months and track my results.', likes: 54 },
+      { authorIndex: 1, content: 'Did you filter by market regime? I suspect regular divergence works better in ranging markets and hidden divergence works better in trending markets. Would love to see that breakdown.', likes: 37 },
+      { authorIndex: 0, content: '@Mia — You are exactly right. When I filtered by ADX (>25 = trending, <25 = ranging), regular divergence win rate in ranging markets jumped to 68%. Hidden divergence in trending markets hit 76%. Context is everything.', likes: 61 },
+    ],
+  },
 ];
 
 // ── Seed function ──────────────────────────────────────────────────────────────
@@ -459,3 +726,4 @@ seed().catch(err => {
   console.error('Fatal error:', err);
   process.exit(1);
 });
+
