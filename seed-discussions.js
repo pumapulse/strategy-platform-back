@@ -44,7 +44,7 @@ The key insight was patience — I skipped 3 out of every 4 setups that didn't m
 Happy to answer questions about specific trade setups.`,
     likes: 5,
     views: 28,
-    createdDaysAgo: 2,
+    createdDaysAgo: 1,
     replies: [
       { authorIndex: 1, content: 'This is incredible. Did you use any specific indicator for the volume confirmation, or just raw volume bars? I\'ve been struggling with false breakouts on lower timeframes.', likes: 2 },
       { authorIndex: 2, content: 'The 2R partial take-profit rule is underrated. Most traders either hold too long or exit too early. Moving stop to breakeven after 50% out removes all the emotional pressure.', likes: 3 },
@@ -84,7 +84,7 @@ Hidden Bullish Divergence (price makes higher low, RSI makes lower low):
 The ML Momentum strategy on this platform actually incorporates hidden divergence as one of its filters — that's part of why its win rate is so consistent.`,
     likes: 4,
     views: 19,
-    createdDaysAgo: 5,
+    createdDaysAgo: 3,
     replies: [
       { authorIndex: 2, content: 'The hidden divergence point is gold. Most YouTube tutorials only teach regular divergence and wonder why their win rate is 40%. Hidden divergence in a trend is one of the highest probability setups I know.', likes: 2 },
       { authorIndex: 3, content: 'Do you apply this to crypto specifically or does it work equally well on forex and stocks? I\'ve noticed crypto tends to have more "fake" divergences due to the volatility.', likes: 1 },
@@ -123,7 +123,7 @@ Account remaining: 0.90^10 = 34.9% — you're in serious trouble
 Never risk more than you can afford to lose 10 times in a row.`,
     likes: 5,
     views: 24,
-    createdDaysAgo: 7,
+    createdDaysAgo: 3,
     replies: [
       { authorIndex: 0, content: 'The Kelly Criterion explanation is the clearest I\'ve seen. Most people just say "risk 1-2%" without explaining the math behind it. This should be pinned.', likes: 3 },
       { authorIndex: 1, content: 'I\'d add one more thing: correlation risk. If you\'re running 3 crypto strategies simultaneously, they\'re all correlated. Your effective risk per "market event" is much higher than 2% × 3 = 6%.', likes: 2 },
@@ -171,7 +171,7 @@ The strategy itself performed close to backtest expectations. The problems were 
 Next month I'm adding circuit breakers: auto-pause if daily loss exceeds 3%.`,
     likes: 4,
     views: 22,
-    createdDaysAgo: 10,
+    createdDaysAgo: 5,
     replies: [
       { authorIndex: 0, content: 'The double-entry bug is a classic. Always implement idempotency checks — if an order ID already exists, don\'t submit again. Saved me from a similar disaster.', likes: 2 },
       { authorIndex: 1, content: 'What was your slippage on average vs backtest assumption? This is the biggest hidden cost most people ignore when going from backtest to live.', likes: 1 },
@@ -218,7 +218,7 @@ When one side of the market (bid or ask) has significantly more volume than the 
 This takes time to learn but once it clicks, you'll never look at a plain candlestick chart the same way.`,
     likes: 3,
     views: 16,
-    createdDaysAgo: 12,
+    createdDaysAgo: 6,
     replies: [
       { authorIndex: 1, content: 'The delta divergence concept is what finally made order flow click for me. When price makes a new high but delta is negative, it means the move was driven by stop-hunting, not genuine buying. Reversal incoming.', likes: 2 },
       { authorIndex: 0, content: 'Bookmap is genuinely game-changing for futures trading. The heatmap shows you where the big limit orders are sitting — you can literally see the "walls" before price hits them.', likes: 1 },
@@ -268,7 +268,7 @@ Best strategies: Breakout on earnings, Sector rotation, Momentum
 Start with crypto if you have under $10k — the 24/7 nature and volatility give you more learning opportunities per month. Move to forex once you have consistent results and want lower volatility. Add stocks for diversification.`,
     likes: 4,
     views: 18,
-    createdDaysAgo: 15,
+    createdDaysAgo: 8,
     replies: [
       { authorIndex: 2, content: 'The PDT rule point for stocks is huge and often overlooked. Many beginners blow up trying to day trade stocks with a $5k account, not realizing they\'re limited to 3 round trips per week.', likes: 2 },
       { authorIndex: 1, content: 'I\'d add that crypto has the best data availability for backtesting. Most exchanges provide free tick data going back years. For forex, quality historical data often costs money.', likes: 1 },
@@ -308,7 +308,7 @@ Fix: Never size a position larger than 1% of the average daily volume.
 The strategies on this platform are backtested with realistic assumptions — that's why the live results actually match.`,
     likes: 5,
     views: 30,
-    createdDaysAgo: 18,
+    createdDaysAgo: 9,
     replies: [
       { authorIndex: 0, content: 'The look-ahead bias point is the most common mistake I see from beginners. Even experienced coders make this mistake when using pandas — df["close"].shift(-1) is your friend.', likes: 3 },
       { authorIndex: 2, content: 'Walk-forward optimization is the gold standard but most retail traders don\'t know it exists. I\'d add: use at least 3 out-of-sample periods, not just one. One lucky period can still fool you.', likes: 2 },
@@ -348,7 +348,7 @@ A losing trade doesn't make you a loser. A losing day doesn't make you a bad tra
 I've been profitable for 14 consecutive months since implementing these rules. The strategy didn't change. I did.`,
     likes: 5,
     views: 27,
-    createdDaysAgo: 21,
+    createdDaysAgo: 11,
     replies: [
       { authorIndex: 0, content: 'Thank you for sharing this. The 24-hour rule is something I\'ve implemented too and it\'s been transformative. The hardest part is the first 10 minutes after a big loss when everything in you wants to "fix" it immediately.', likes: 3 },
       { authorIndex: 1, content: 'The journaling point is underrated. I started tracking my emotional state (1-10 scale) before each trade. Discovered I had a 23% win rate when my stress level was above 7. Now I don\'t trade when stressed.', likes: 2 },
@@ -382,7 +382,7 @@ The strategy is slow — only 8 signals in 6 months. But each signal is high qua
 Currently in a long position entered at $67,400. Stop at $57,290 (15% trailing from $67,400).`,
     likes: 3,
     views: 14,
-    createdDaysAgo: 25,
+    createdDaysAgo: 12,
     replies: [
       { authorIndex: 0, content: 'The EMA 200 filter point is something I learned the hard way too. Without it you get whipsawed constantly in ranging markets. It acts as a macro trend filter that keeps you on the right side.', likes: 2 },
       { authorIndex: 1, content: 'How do you handle the lag? By the time EMA 20 crosses EMA 50, you\'ve already missed 5-10% of the move. Do you use any leading indicators to get in earlier?', likes: 1 },
@@ -415,7 +415,7 @@ Recent trade on SOL/USDT:
 The key is patience during the squeeze. Sometimes it lasts 2 weeks. Don't try to predict direction — wait for the market to tell you.`,
     likes: 4,
     views: 21,
-    createdDaysAgo: 28,
+    createdDaysAgo: 14,
     replies: [
       { authorIndex: 3, content: 'The patience point is everything. I used to try to predict which way the squeeze would break and got burned constantly. Now I just set alerts for both directions and wait.', likes: 2 },
       { authorIndex: 0, content: 'How do you handle false breakouts? Sometimes price closes outside the band and then immediately reverses back inside. Do you have a filter for that?', likes: 1 },
@@ -452,7 +452,7 @@ My 12-month results running the Turtle System on BTC:
 The system works. The question is whether you can follow it.`,
     likes: 4,
     views: 23,
-    createdDaysAgo: 32,
+    createdDaysAgo: 15,
     replies: [
       { authorIndex: 1, content: 'The "think in batches of 20" mental model is something every trader needs to internalize. Individual trade outcomes are noise. The edge only shows over a large sample.', likes: 2 },
       { authorIndex: 4, content: 'The 22.4% max drawdown is the real test. Most people say they can handle drawdowns until they\'re actually sitting in one. Have you ever been tempted to abandon the system during a losing streak?', likes: 1 },
@@ -498,7 +498,7 @@ Walk-forward validation results:
 The 67% win rate on data the model never saw is what makes this credible.`,
     likes: 5,
     views: 26,
-    createdDaysAgo: 35,
+    createdDaysAgo: 17,
     replies: [
       { authorIndex: 2, content: 'The walk-forward validation point is crucial. Anyone can get 80%+ win rate by overfitting to historical data. The out-of-sample performance is the only number that matters.', likes: 3 },
       { authorIndex: 3, content: 'How often is the model retrained? Markets change over time. A model trained on 2021-2023 data might not capture the current market regime.', likes: 1 },
@@ -536,7 +536,7 @@ My rules:
 The edge comes from the fact that extreme funding rates represent market imbalance. When everyone is positioned the same way, the move to correct that imbalance is predictable.`,
     likes: 4,
     views: 20,
-    createdDaysAgo: 40,
+    createdDaysAgo: 19,
     replies: [
       { authorIndex: 0, content: 'This is one of the most underrated strategies in crypto. The funding rate is essentially a sentiment indicator that has real money behind it — people are paying to hold those positions.', likes: 2 },
       { authorIndex: 4, content: 'Where do you get funding rate data? I know Binance shows it on the perpetuals page but is there a way to get historical data for backtesting?', likes: 1 },
@@ -578,7 +578,7 @@ My trading rule:
 The edge: on-chain data is a leading indicator. It shows you what is happening before it shows up in price.`,
     likes: 3,
     views: 17,
-    createdDaysAgo: 44,
+    createdDaysAgo: 20,
     replies: [
       { authorIndex: 1, content: 'The exchange net flow metric is something I check every morning. It is one of the few indicators that actually has predictive power rather than just describing what already happened.', likes: 2 },
       { authorIndex: 2, content: 'What services do you use for this data? Glassnode is expensive. Are there free alternatives that are good enough for retail traders?', likes: 1 },
@@ -620,7 +620,7 @@ Key finding: Hidden divergence outperforms regular divergence significantly. The
 The reason: Hidden divergence trades WITH the trend. You have the trend as a tailwind. Regular divergence fights the trend, which is inherently lower probability.`,
     likes: 5,
     views: 25,
-    createdDaysAgo: 48,
+    createdDaysAgo: 22,
     replies: [
       { authorIndex: 3, content: 'The hidden vs regular divergence win rate difference is striking. 71% vs 58-61% is a massive edge. I am going to focus exclusively on hidden divergence for the next 3 months and track my results.', likes: 3 },
       { authorIndex: 1, content: 'Did you filter by market regime? I suspect regular divergence works better in ranging markets and hidden divergence works better in trending markets. Would love to see that breakdown.', likes: 2 },
