@@ -1,0 +1,8 @@
+node_modules
+dist
+*.log
+<<<<<<< HEAD
+=======
+
+.vercel
+>>>>>>> 088f87957ad536d3d27b403fd3e63ac554ccaa15
