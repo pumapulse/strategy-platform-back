@@ -48,8 +48,7 @@ Happy to answer questions about specific trade setups.`,
     replies: [
       { authorIndex: 1, content: 'This is incredible. Did you use any specific indicator for the volume confirmation, or just raw volume bars? I\'ve been struggling with false breakouts on lower timeframes.', likes: 2 },
       { authorIndex: 2, content: 'The 2R partial take-profit rule is underrated. Most traders either hold too long or exit too early. Moving stop to breakeven after 50% out removes all the emotional pressure.', likes: 3 },
-      { authorIndex: 3, content: 'What was your position sizing? Fixed % of account or fixed dollar amount? That matters a lot for the drawdown calculation.', likes: 1 },
-      { authorIndex: 0, content: '@Sofia — I used 2% risk per trade throughout. So position size varied based on the distance to stop-loss. Never risked more than 2% of current account balance on any single trade.', likes: 2 },
+      { authorIndex: 0, content: '@Mia — I used 2% risk per trade throughout. So position size varied based on the distance to stop-loss. Never risked more than 2% of current account balance on any single trade.', likes: 2 },
     ],
   },
   {
@@ -87,7 +86,6 @@ The ML Momentum strategy on this platform actually incorporates hidden divergenc
     createdDaysAgo: 3,
     replies: [
       { authorIndex: 2, content: 'The hidden divergence point is gold. Most YouTube tutorials only teach regular divergence and wonder why their win rate is 40%. Hidden divergence in a trend is one of the highest probability setups I know.', likes: 2 },
-      { authorIndex: 3, content: 'Do you apply this to crypto specifically or does it work equally well on forex and stocks? I\'ve noticed crypto tends to have more "fake" divergences due to the volatility.', likes: 1 },
       { authorIndex: 1, content: '@Sofia — Great question. Crypto does produce more noise. I add a volume filter for crypto: the divergence candle must have below-average volume (showing exhaustion), while the confirmation candle must have above-average volume. This cuts false signals by about 40%.', likes: 3 },
     ],
   },
@@ -129,6 +127,7 @@ Never risk more than you can afford to lose 10 times in a row.`,
       { authorIndex: 1, content: 'I\'d add one more thing: correlation risk. If you\'re running 3 crypto strategies simultaneously, they\'re all correlated. Your effective risk per "market event" is much higher than 2% × 3 = 6%.', likes: 2 },
       { authorIndex: 3, content: 'How do you handle position sizing when the stop-loss is very wide? Sometimes a proper technical stop requires 5-6% price movement, which means a tiny position size.', likes: 1 },
       { authorIndex: 2, content: '@Sofia — If the stop requires 5-6% price movement and you want to risk 2% of account, your position size is just 2/5 = 0.4% of account in the asset. Small position, but that\'s correct. Wide stops = small size. Never widen your stop to fit a larger position.', likes: 2 },
+      { authorIndex: 4, content: 'This is why I love the strategies on this platform — they all come with defined max drawdown stats so you can calculate proper position sizing before you even start.', likes: 1 },
     ],
   },
   {
@@ -176,7 +175,6 @@ Next month I'm adding circuit breakers: auto-pause if daily loss exceeds 3%.`,
       { authorIndex: 0, content: 'The double-entry bug is a classic. Always implement idempotency checks — if an order ID already exists, don\'t submit again. Saved me from a similar disaster.', likes: 2 },
       { authorIndex: 1, content: 'What was your slippage on average vs backtest assumption? This is the biggest hidden cost most people ignore when going from backtest to live.', likes: 1 },
       { authorIndex: 3, content: '@Mia — Backtest assumed 0.5 tick slippage. Live average was 1.2 ticks during normal hours, 2.8 ticks in the first 30 minutes. I now exclude the first 30 minutes from the strategy window.', likes: 3 },
-      { authorIndex: 2, content: 'The circuit breaker idea is essential. I\'d also add a weekly circuit breaker. If you\'re down more than 5% on the week, pause until Monday. Prevents revenge trading by the algorithm.', likes: 2 },
     ],
   },
   {
@@ -221,8 +219,6 @@ This takes time to learn but once it clicks, you'll never look at a plain candle
     createdDaysAgo: 6,
     replies: [
       { authorIndex: 1, content: 'The delta divergence concept is what finally made order flow click for me. When price makes a new high but delta is negative, it means the move was driven by stop-hunting, not genuine buying. Reversal incoming.', likes: 2 },
-      { authorIndex: 0, content: 'Bookmap is genuinely game-changing for futures trading. The heatmap shows you where the big limit orders are sitting — you can literally see the "walls" before price hits them.', likes: 1 },
-      { authorIndex: 2, content: 'How applicable is this to crypto? The order books on crypto exchanges are notoriously spoofed. Does order flow analysis still work when large players can place and cancel orders instantly?', likes: 1 },
     ],
   },
   {
@@ -271,7 +267,6 @@ Start with crypto if you have under $10k — the 24/7 nature and volatility give
     createdDaysAgo: 8,
     replies: [
       { authorIndex: 2, content: 'The PDT rule point for stocks is huge and often overlooked. Many beginners blow up trying to day trade stocks with a $5k account, not realizing they\'re limited to 3 round trips per week.', likes: 2 },
-      { authorIndex: 1, content: 'I\'d add that crypto has the best data availability for backtesting. Most exchanges provide free tick data going back years. For forex, quality historical data often costs money.', likes: 1 },
     ],
   },
   {
@@ -312,7 +307,6 @@ The strategies on this platform are backtested with realistic assumptions — th
     replies: [
       { authorIndex: 0, content: 'The look-ahead bias point is the most common mistake I see from beginners. Even experienced coders make this mistake when using pandas — df["close"].shift(-1) is your friend.', likes: 3 },
       { authorIndex: 2, content: 'Walk-forward optimization is the gold standard but most retail traders don\'t know it exists. I\'d add: use at least 3 out-of-sample periods, not just one. One lucky period can still fool you.', likes: 2 },
-      { authorIndex: 3, content: 'The liquidity point is critical for crypto. I\'ve seen "amazing" strategies that only work because they were backtested on coins where the strategy itself would have moved the price significantly.', likes: 1 },
     ],
   },
   {
@@ -353,6 +347,7 @@ I've been profitable for 14 consecutive months since implementing these rules. T
       { authorIndex: 0, content: 'Thank you for sharing this. The 24-hour rule is something I\'ve implemented too and it\'s been transformative. The hardest part is the first 10 minutes after a big loss when everything in you wants to "fix" it immediately.', likes: 3 },
       { authorIndex: 1, content: 'The journaling point is underrated. I started tracking my emotional state (1-10 scale) before each trade. Discovered I had a 23% win rate when my stress level was above 7. Now I don\'t trade when stressed.', likes: 2 },
       { authorIndex: 2, content: 'The identity separation point is profound. Most traders define themselves by their P&L. When you lose, you feel like a failure as a person. Breaking that link is the real work.', likes: 3 },
+      { authorIndex: 4, content: 'The broker-level daily loss limit is genius. Willpower is finite. Remove the decision entirely by making it impossible to override. I\'ve done the same thing.', likes: 1 },
     ],
   },
   {
@@ -385,7 +380,6 @@ Currently in a long position entered at $67,400. Stop at $57,290 (15% trailing f
     createdDaysAgo: 12,
     replies: [
       { authorIndex: 0, content: 'The EMA 200 filter point is something I learned the hard way too. Without it you get whipsawed constantly in ranging markets. It acts as a macro trend filter that keeps you on the right side.', likes: 2 },
-      { authorIndex: 1, content: 'How do you handle the lag? By the time EMA 20 crosses EMA 50, you\'ve already missed 5-10% of the move. Do you use any leading indicators to get in earlier?', likes: 1 },
     ],
   },
   {
