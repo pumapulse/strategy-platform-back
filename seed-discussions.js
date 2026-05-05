@@ -23,9 +23,8 @@ const seedUsers = [
 // Random int between min and max (inclusive)
 const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-// 15 posts spread naturally from 5 to 40 days ago (1-2 per active day, gaps between)
-// Days ago for each post (sorted recent → oldest)
-const postDays = [5, 7, 7, 9, 11, 13, 15, 17, 19, 19, 22, 25, 28, 33, 40];
+// 15 posts spread naturally from 5 to 40 days ago — irregular gaps, max 2 per day
+const postDays = [5, 6, 8, 10, 10, 14, 18, 21, 23, 27, 27, 31, 35, 37, 40];
 
 const discussions = [
   {
