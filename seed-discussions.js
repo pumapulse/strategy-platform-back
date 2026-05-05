@@ -20,6 +20,13 @@ const seedUsers = [
   { name: 'Liam Park',     email: 'liam.park@seed.com',     password: 'Seed1234!' },
 ];
 
+// Random int between min and max (inclusive)
+const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+// 15 posts spread naturally from 5 to 40 days ago (1-2 per active day, gaps between)
+// Days ago for each post (sorted recent → oldest)
+const postDays = [5, 7, 7, 9, 11, 13, 15, 17, 19, 19, 22, 25, 28, 33, 40];
+
 const discussions = [
   {
     authorIndex: 0,
@@ -684,14 +691,21 @@ async function seed() {
   // 2. Insert discussions + replies with realistic dates
   let discussionCount = 0;
   let replyCount = 0;
+  let dayIndex = 0;
 
   for (const d of discussions) {
     const authorId = userIds[d.authorIndex];
     if (!authorId) { console.warn(`  ⚠ Skipping discussion (no author): ${d.title}`); continue; }
 
-    // Calculate created_at based on createdDaysAgo
+    // Assign date from postDays array (5 → 40 days ago)
+    const daysAgo = postDays[dayIndex % postDays.length];
+    dayIndex++;
     const createdAt = new Date();
-    createdAt.setDate(createdAt.getDate() - (d.createdDaysAgo || 0));
+    createdAt.setDate(createdAt.getDate() - daysAgo);
+
+    // Random likes 1-5, random views 10-30
+    const likes = rand(1, 5);
+    const views = rand(10, 30);
 
     // Insert discussion
     const { data: disc, error: dErr } = await supabase
@@ -701,8 +715,8 @@ async function seed() {
         title: d.title,
         category: d.category,
         content: d.content,
-        likes: d.likes,
-        views: d.views,
+        likes,
+        views,
         created_at: createdAt.toISOString(),
       })
       .select('id')
@@ -714,9 +728,9 @@ async function seed() {
     }
 
     discussionCount++;
-    console.log(`  ✓ Discussion: "${d.title.slice(0, 60)}..."`);
+    console.log(`  ✓ [Day -${daysAgo}] [${likes}❤ ${views}👁] "${d.title.slice(0, 55)}..."`);
 
-    // Insert replies
+    // Insert replies with random likes 1-3
     for (const r of d.replies) {
       const replyAuthorId = userIds[r.authorIndex];
       if (!replyAuthorId) continue;
@@ -727,7 +741,7 @@ async function seed() {
           discussion_id: disc.id,
           user_id: replyAuthorId,
           content: r.content,
-          likes: r.likes,
+          likes: rand(1, 3),
         });
 
       if (rErr) {
