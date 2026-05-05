@@ -628,6 +628,26 @@ The reason: Hidden divergence trades WITH the trend. You have the trend as a tai
 async function seed() {
   console.log('🌱 Seeding community discussions...\n');
 
+  // 0. Clear existing seed discussions and replies
+  console.log('🗑  Clearing old seed data...');
+  const seedEmails = seedUsers.map(u => u.email);
+  const { data: existingUsers } = await supabase
+    .from('users')
+    .select('id')
+    .in('email', seedEmails);
+
+  if (existingUsers && existingUsers.length > 0) {
+    const ids = existingUsers.map(u => u.id);
+    // Delete replies first (foreign key), then discussions
+    const { data: discs } = await supabase.from('discussions').select('id').in('user_id', ids);
+    if (discs && discs.length > 0) {
+      const discIds = discs.map(d => d.id);
+      await supabase.from('discussion_replies').delete().in('discussion_id', discIds);
+      await supabase.from('discussions').delete().in('id', discIds);
+    }
+    console.log('  ✓ Old discussions cleared\n');
+  }
+
   // 1. Upsert seed users
   const userIds = [];
   for (const u of seedUsers) {
